@@ -1,128 +1,592 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Drew Haiku Generator</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
+  <title>Drew the Director | Vibe Code</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255, 214, 94, 0.28), transparent 25%),
+        radial-gradient(circle at 85% 10%, rgba(120, 180, 255, 0.22), transparent 28%),
+        radial-gradient(circle at 80% 80%, rgba(255, 60, 60, 0.24), transparent 32%),
+        linear-gradient(135deg, #050505 0%, #10141c 34%, #24120b 65%, #030303 100%);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.08) 45%, transparent 55%),
+        repeating-linear-gradient(
+          135deg,
+          rgba(255,255,255,0.035) 0px,
+          rgba(255,255,255,0.035) 1px,
+          transparent 1px,
+          transparent 12px
+        );
+      opacity: 0.6;
+      pointer-events: none;
+      animation: lightSweep 8s linear infinite;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      width: 900px;
+      height: 900px;
+      border-radius: 50%;
+      background:
+        conic-gradient(
+          from 180deg,
+          rgba(255,255,255,0.02),
+          rgba(255,215,90,0.18),
+          rgba(255,80,70,0.13),
+          rgba(80,160,255,0.14),
+          rgba(255,255,255,0.02)
+        );
+      filter: blur(12px);
+      opacity: 0.45;
+      animation: rotateAura 22s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes lightSweep {
+      0% {
+        transform: translateX(-30%);
+      }
+      100% {
+        transform: translateX(30%);
+      }
+    }
+
+    @keyframes rotateAura {
+      from {
+        transform: rotate(0deg) scale(1.1);
+      }
+      to {
+        transform: rotate(360deg) scale(1.1);
+      }
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 440px;
+      min-height: 880px;
+      border-radius: 46px;
+      padding: 18px;
+      background: rgba(5, 5, 8, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow:
+        0 40px 90px rgba(0,0,0,0.72),
+        inset 0 0 40px rgba(255,255,255,0.05);
+      backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 122px;
+      height: 28px;
+      background: #000;
+      border-radius: 999px;
+      z-index: 10;
+    }
+
+    .screen {
+      padding-top: 44px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero {
+      min-height: 230px;
+      border-radius: 34px;
+      padding: 24px;
+      margin-bottom: 16px;
+      background:
+        linear-gradient(rgba(0,0,0,0.22), rgba(0,0,0,0.82)),
+        radial-gradient(circle at top left, rgba(255, 218, 100, 0.38), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(255, 70, 70, 0.38), transparent 35%),
+        linear-gradient(135deg, #151515, #2d2115, #0b1426);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow:
+        0 20px 55px rgba(0,0,0,0.5),
+        inset 0 0 35px rgba(255,255,255,0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "✦";
+      position: absolute;
+      right: 22px;
+      top: 18px;
+      font-size: 58px;
+      opacity: 0.22;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -40px -60px auto;
+      width: 220px;
+      height: 220px;
+      background: rgba(255,255,255,0.08);
+      clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      transform: rotate(20deg);
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ffd86b;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 42px;
+      line-height: 0.94;
+      letter-spacing: -2px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      line-height: 1.55;
+      color: rgba(255,255,255,0.82);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .box {
+      border-radius: 28px;
+      padding: 18px;
+      background: rgba(255,255,255,0.085);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: 0 18px 45px rgba(0,0,0,0.34);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .box::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.09), transparent 40%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .box-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .box h2 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      letter-spacing: -0.4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tag {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #111;
+      background: #ffd86b;
+      border-radius: 999px;
+      padding: 5px 8px;
+      white-space: nowrap;
+    }
+
+    .output {
+      min-height: 96px;
+      border-radius: 20px;
+      padding: 16px;
+      background: rgba(0,0,0,0.34);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.88);
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      white-space: pre-line;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 14px 16px;
+      cursor: pointer;
+      color: #111;
+      background: linear-gradient(135deg, #ffd86b, #fff2bd);
+      font-weight: 950;
+      font-size: 14px;
+      box-shadow: 0 10px 25px rgba(255,216,107,0.18);
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 16px 34px rgba(255,216,107,0.25);
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    .footer {
+      text-align: center;
+      color: rgba(255,255,255,0.46);
+      font-size: 12px;
+      padding: 16px 0 2px;
+    }
+
+    .small-note {
+      color: rgba(255,255,255,0.58);
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 460px) {
       body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-family: Georgia, serif;
-        background: linear-gradient(135deg, #dbeafe, #bfdbfe, #93c5fd);
+        padding: 12px;
       }
 
-      .card {
-        background: #ffffff;
-        width: 420px;
-        padding: 40px;
-        border-radius: 25px;
-        text-align: center;
-        box-shadow: 0 15px 40px rgba(0, 0, 50, 0.15);
+      .phone {
+        min-height: auto;
+        border-radius: 34px;
       }
 
       h1 {
-        color: #1e3a8a;
-        font-size: 30px;
-        margin-bottom: 10px;
+        font-size: 36px;
       }
+    }
+  </style>
+</head>
 
-      p {
-        color: #3b82f6;
-        font-size: 16px;
-      }
+<body>
+  <main class="phone">
+    <div class="screen">
 
-      button {
-        background-color: #2563eb;
-        color: white;
-        border: none;
-        padding: 15px 25px;
-        font-size: 16px;
-        border-radius: 999px;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: 0.3s;
-      }
+      <section class="hero">
+        <div class="eyebrow">Drew the Director</div>
+        <h1>The Director’s Vibe Code</h1>
+        <p class="subtitle">
+          Generate legendary nicknames, cinematic compliments, original lyrics,
+          and scriptures inspired by Drew’s creative world.
+        </p>
+      </section>
 
-      button:hover {
-        background-color: #1d4ed8;
-      }
+      <section class="grid">
 
-      .result-box {
-        margin-top: 25px;
-        padding: 20px;
-        border-radius: 15px;
-        background-color: #eff6ff;
-        color: #1e293b;
-        font-size: 20px;
-        min-height: 100px;
-        white-space: pre-line; /* this keeps line breaks */
-      }
-    </style>
-  </head>
+        <div class="box">
+          <div class="box-content">
+            <h2>
+              Nickname Generator
+              <span class="tag">Identity</span>
+            </h2>
+            <div id="nicknameBox" class="output">
+              Tap the button to reveal Drew’s next legendary director name.
+            </div>
+            <button onclick="generateNickname()">Generate Nickname</button>
+          </div>
+        </div>
 
-  <body>
-    <div class="card">
-      <h1>Drew Haiku Generator</h1>
-      <p>Click to reveal something true about Drew</p>
+        <div class="box">
+          <div class="box-content">
+            <h2>
+              Amazing Things About Him
+              <span class="tag">Aura</span>
+            </h2>
+            <div id="amazingBox" class="output">
+              Generate a nickname first, and this box will praise him using that nickname.
+            </div>
+            <button onclick="generateAmazing()">Generate Amazing Thing</button>
+          </div>
+        </div>
 
-      <button onclick="generateHaiku()">Generate Haiku</button>
+        <div class="box">
+          <div class="box-content">
+            <h2>
+              Song Lyric Generator
+              <span class="tag">Anthem</span>
+            </h2>
+            <div id="lyricsBox" class="output">
+              Generate a nickname first, and this box will create original lyrics around it.
+            </div>
+            <button onclick="generateLyrics()">Generate Song Lyrics</button>
+          </div>
+        </div>
 
-      <div id="result" class="result-box">
-Your haiku will appear here
+        <div class="box">
+          <div class="box-content">
+            <h2>
+              Scripture Generator
+              <span class="tag">Word</span>
+            </h2>
+            <div id="scriptureBox" class="output">
+              Tap the button to generate a scripture that matches the creative calling.
+            </div>
+            <button onclick="generateScripture()">Generate Scripture</button>
+          </div>
+        </div>
+
+      </section>
+
+      <p class="small-note">
+        Nicknames automatically update the amazing things and song lyrics boxes.
+      </p>
+
+      <div class="footer">
+        Built for Drew the Director • @drewthedirector
       </div>
+
     </div>
+  </main>
 
-    <script>
-      function generateHaiku() {
-        const haikus = [
-`Drew the steady light
-Kindness moves in quiet ways
-He lifts hearts with ease`,
+  <script>
+    let currentNickname = "Drew the Director";
 
-`Tall in more than height
-Strength and grace walk side by side
-Drew stands firm in truth`,
+    const nicknames = [
+      "Bon Bon",
+      "Poopey Head",
+      "Muffin",
+      "Boof",
+      "Drewski",
+      "Drewbie",
+      "Captain Drew",
+      "Gringo",
 
-`Laughter fills the room
-His joy makes the weight feel light
-A gift to be near`,
+      "Bon Bon the Director",
+      "Poopey Head Supreme",
+      "Muffin the Movie Maker",
+      "Boof the Visionary",
+      "Drewski the Great",
+      "Drewbie the Legend",
+      "Captain Drew the Cinematic Hero",
+      "Gringo the Great",
 
-`Mind sharp, heart so soft
-Wisdom wrapped in gentle care
-He sees and he knows`,
+      "The Frame King",
+      "The Vision General",
+      "The Cinema Assassin",
+      "The Shot Caller",
+      "The Lens Legend",
+      "The Moment Maker",
+      "The Story Samurai",
+      "The Cutscene King",
+      "The Creative Commander",
+      "The Motion Prophet",
+      "The Angle Architect",
+      "The Visual Vanguard",
+      "The Scene Sculptor",
+      "The Reel Wielder",
+      "The Light Bender",
+      "The Culture Captain",
+      "The Director Supreme",
+      "The Epic Editor",
+      "The Focus Fighter",
+      "The Storyblade",
+      "The Golden Frame",
+      "The Legacy Lens",
+      "The Timeline Titan",
+      "The Cinematic Champion",
+      "The Vibe Visionary",
+      "The Shot Samurai",
+      "The Production Phantom",
+      "The Camera Crusader",
+      "The Rhythm Ranger",
+      "The Creative Assassin",
+      "The Frame Fighter",
+      "The Reel Ronin",
+      "The Visual Victor",
+      "The Scene Sensei",
+      "The Lens Lord",
+      "The Director of Destiny",
+      "The Story Strategist",
+      "The Mood Master",
+      "The Golden Cut",
+      "The Camera Commander",
+      "The Kingdom Cinematographer",
+      "The Motion Maestro",
+      "The Edit Emperor",
+      "The Visual Warrior",
+      "The Dream Director",
+      "The Light Chaser",
+      "The Story Champion",
+      "The Cinematic Sage",
+      "The Frame Phantom",
+      "The Reel Ruler",
+      "The Shot Shogun",
+      "The Vision Vessel",
+      "The Legacy Director",
+      "The Motion Mystic",
+      "The Story Knight",
+      "The Scene Slayer",
+      "The Cinematic Flame",
+      "The Director Prime",
+      "The Visual Gladiator",
+      "The Frame Assassin"
+    ];
 
-`Son of God he walks
-With purpose woven in him
-Love marks every step`,
+    const amazingTemplates = [
+      "{name} sees what other people miss and turns ordinary moments into cinematic evidence.",
+      "{name} does not just capture a scene. He gives it movement, meaning, and memory.",
+      "{name} has that rare creative eye that can make real life feel like a movie trailer.",
+      "{name} brings pressure, pace, and purpose into every frame he touches.",
+      "{name} has main-character creative energy, but he uses it to make everyone else shine.",
+      "{name} knows how to turn chaos into composition and noise into story.",
+      "{name} carries the kind of vision that makes a moment feel bigger than itself.",
+      "{name} has the eye of a director, the mind of a strategist, and the instinct of an artist.",
+      "{name} can walk into a room and somehow find the frame everyone else overlooked.",
+      "{name} turns movement into meaning and footage into feeling.",
+      "{name} has that rare mix of taste, timing, and creative courage.",
+      "{name} does not chase the moment. He studies it, frames it, and makes it unforgettable.",
+      "{name} has the kind of creative presence that makes everything feel elevated.",
+      "{name} understands that storytelling is not just what you show. It is what you make people feel.",
+      "{name} brings cinematic discipline to real-life energy.",
+      "{name} knows how to make the visual world feel alive.",
+      "{name} does not just press record. He directs the atmosphere.",
+      "{name} gives every shot a reason to exist.",
+      "{name} is proof that vision is not just seeing. It is knowing what to do with what you see.",
+      "{name} moves like someone who understands legacy is built one frame at a time.",
 
-`Faithful friend he stays
-Showing up in silent ways
-That speak louder still`,
+      "{name} is somehow goofy and legendary at the same time, which is honestly a rare and dangerous combination.",
+      "{name} has the kind of creativity that makes people stop, look twice, and wonder how he saw it that way.",
+      "{name} brings the energy of someone who was born to hold the camera and command the moment.",
+      "{name} is talented, funny, sharp, and way too iconic for a normal nickname.",
+      "{name} has the rare ability to make people feel seen while making the whole scene look cinematic.",
+      "{name} is proof that being creative, hilarious, and deeply gifted can all exist in one person.",
+      "{name} has director energy with just enough chaos to keep the universe entertained.",
+      "{name} is the kind of person who can turn a random day into a scene worth remembering.",
+      "{name} carries both soft muffin energy and full cinematic boss energy.",
+      "{name} is a whole production, a whole vibe, and somehow still a lovable menace."
+    ];
 
-`Brother strong and true
-Loyal in the in-between
-A place you can rest`,
+    const lyricTemplates = [
+      "They call him {name}, moving through the light,\nCamera in his hand, turning moments into flight.\nEvery frame got fire, every scene got soul,\nHe does not chase the story, he makes the story whole.",
 
-`Drew with quiet fire
-Discipline behind the scenes
-Strength you cannot fake`,
+      "{name} in the cut, yeah, the vision stays clean,\nWalking through the chaos like he already saw the scene.\nLights go low, but the purpose shines bright,\nHe turns one little moment into cinema at night.",
 
-`Generous by heart
-Gives without needing a name
-That is who he is`,
+      "Oh {name}, with the lens and the flame,\nEvery shot remembers when the world forgets his name.\nHe sees through the noise, finds gold in the gray,\nTurns an ordinary second into something that stays.",
 
-`Drew, a rare kind soul
-Where humor and depth both meet
-A life that feels whole`
-        ];
+      "Frame by frame, {name} builds the sky,\nCatching every heartbeat as the days go by.\nNot just a camera, not just a view,\nHe makes the hidden things feel true.",
 
-        const randomIndex = Math.floor(Math.random() * haikus.length);
+      "{name} got rhythm in the way he sees,\nStories in the silence, movement in the breeze.\nWhen the world moves fast and the lights turn cold,\nHe finds the kind of beauty that never gets old.",
 
-        document.getElementById("result").innerText = haikus[randomIndex];
-      }
-    </script>
-  </body>
+      "They say action, he already knows,\nWhere the light bends soft and the feeling goes.\n{name} with the vision, steady in the storm,\nMaking every memory cinematic and warm.",
+
+      "{name} does not follow the sound,\nHe finds the heartbeat under the ground.\nCamera up, soul awake,\nEvery little frame got a legacy to make.",
+
+      "In the middle of the battle, where the bright lights spin,\n{name} finds the story waiting deep within.\nNot just motion, not just fame,\nHe gives every second a name.",
+
+      "{name}, yeah, the vision is rare,\nCuts through the smoke like a sword in the air.\nEvery scene rises, every moment gets crowned,\nWhen he steps behind the lens, the whole world slows down.",
+
+      "Let the credits roll, let the lights come through,\n{name} saw the story before anybody knew.\nHe built it with focus, he framed it with grace,\nTurned a passing little moment into a permanent place.",
+
+      "{name} walked in with the lens and the grin,\nHalf little menace, half born to win.\nLights go boom and the whole crowd knew,\nNobody frames the world quite like Drew.",
+
+      "Bon bon heart with a boss-man stride,\n{name} got the whole scene glowing worldwide.\nFunny little nickname, legendary soul,\nTurns every wild moment into cinematic gold.",
+
+      "{name}, oh the camera loves your name,\nEven when you act goofy, you still bring flame.\nMuffin with the vision, boof with the spark,\nMaking little movies out of light in the dark.",
+
+      "Captain on the scene, yeah {name} takes flight,\nCuts through the chaos with a frame full of light.\nDrewski in motion, Drewbie with the glow,\nEverywhere he steps, the story starts to show.",
+
+      "They laughed when they heard {name} enter the room,\nThen the shot hit hard like a cinematic boom.\nFunny little title, but the gift runs deep,\nHe directs the kind of memories people keep."
+    ];
+
+    const scriptures = [
+      "Proverbs 18:16 — A man’s gift makes room for him and brings him before great men.",
+      "Habakkuk 2:2 — Write the vision; make it plain on tablets, so he may run who reads it.",
+      "Exodus 35:35 — He has filled them with skill to do every sort of work done by an engraver or by a designer.",
+      "Colossians 3:23 — Whatever you do, work heartily, as for the Lord and not for men.",
+      "James 1:17 — Every good gift and every perfect gift is from above.",
+      "Proverbs 22:29 — Do you see a man skillful in his work? He will stand before kings.",
+      "Psalm 90:17 — Establish the work of our hands upon us; yes, establish the work of our hands.",
+      "Matthew 5:16 — Let your light shine before others, so that they may see your good works and give glory to your Father.",
+      "1 Peter 4:10 — As each has received a gift, use it to serve one another.",
+      "Ephesians 2:10 — For we are his workmanship, created in Christ Jesus for good works.",
+      "Genesis 1:3 — And God said, Let there be light, and there was light.",
+      "Isaiah 60:1 — Arise, shine, for your light has come, and the glory of the Lord has risen upon you.",
+      "Daniel 1:17 — God gave them learning and skill in all literature and wisdom.",
+      "Psalm 33:3 — Sing to him a new song; play skillfully on the strings, with loud shouts.",
+      "2 Timothy 1:6 — Fan into flame the gift of God, which is in you.",
+      "Romans 12:6 — Having gifts that differ according to the grace given to us, let us use them.",
+      "Ecclesiastes 9:10 — Whatever your hand finds to do, do it with your might.",
+      "1 Corinthians 10:31 — Whatever you do, do all to the glory of God.",
+      "Psalm 37:5 — Commit your way to the Lord; trust in him, and he will act.",
+      "Isaiah 64:8 — We are the clay, and you are our potter; we are all the work of your hand."
+    ];
+
+    function randomFrom(array) {
+      return array[Math.floor(Math.random() * array.length)];
+    }
+
+    function fillTemplate(template, name) {
+      return template.replaceAll("{name}", name);
+    }
+
+    function generateNickname() {
+      currentNickname = randomFrom(nicknames);
+      document.getElementById("nicknameBox").innerText = currentNickname;
+
+      generateAmazing();
+      generateLyrics();
+    }
+
+    function generateAmazing() {
+      const amazing = fillTemplate(randomFrom(amazingTemplates), currentNickname);
+      document.getElementById("amazingBox").innerText = amazing;
+    }
+
+    function generateLyrics() {
+      const lyrics = fillTemplate(randomFrom(lyricTemplates), currentNickname);
+      document.getElementById("lyricsBox").innerText = lyrics;
+    }
+
+    function generateScripture() {
+      const scripture = randomFrom(scriptures);
+      document.getElementById("scriptureBox").innerText = scripture;
+    }
+  </script>
+</body>
 </html>
